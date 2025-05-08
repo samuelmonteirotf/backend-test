@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  hapi-fhir-server:
+    image: hapiproject/hapi:latest
+    container_name: hapi-fhir
+    ports:
+      - "8080:8080"
+    environment:
+      - HAPI_FHIR_DATASOURCE_URL=jdbc:postgresql://db:5432/hapi
+      - HAPI_FHIR_DATASOURCE_USERNAME=hapi
+      - HAPI_FHIR_DATASOURCE_PASSWORD=hapi
+      - HAPI_FHIR_DB=POSTGRES
+      - HAPI_FHIR_SERVER_ADDRESS=http://localhost:8080/fhir
+      - HAPI_FHIR_CONTEXT_PATH=/fhir
+    depends_on:
+      - db
+    networks:
+      - hapi-net
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: hapi-fhir-db
+    environment:
+      - POSTGRES_DB=hapi
+      - POSTGRES_USER=hapi
+      - POSTGRES_PASSWORD=hapi
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - hapi-net
+    restart: unless-stopped
+
+volumes:
+  db_data:
+
+networks:
+  hapi-net:
+    driver: bridge
