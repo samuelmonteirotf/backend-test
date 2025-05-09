@@ -12,4 +12,4 @@
 2. Clone este repositório:
    ```bash
    git clone https://github.com/SEU_USUARIO/munai-backend-test.git
-   cd munai-backend-test
+   cd backend-test
